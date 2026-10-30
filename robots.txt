@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Crawlers only read robots.txt at the domain root, so the sitemaps of every site live here.
+Sitemap: https://fchapoulliep.github.io/portfolio/sitemap.xml
+Sitemap: https://fchapoulliep.github.io/3dpokedex/sitemap.xml
+Sitemap: https://fchapoulliep.github.io/bleachdex3d/sitemap.xml
+Sitemap: https://fchapoulliep.github.io/dragondex3d/sitemap.xml
+Sitemap: https://fchapoulliep.github.io/mariodex3d/sitemap.xml
+Sitemap: https://fchapoulliep.github.io/narutodex3d/sitemap.xml
