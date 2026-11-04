@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -31,29 +31,190 @@
       }
     </script>
 
-    <meta name="theme-color" content="#121212" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fafafa" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#121212" />
+
+    <!-- Same origin as the portfolio, so the visitor's theme choice is already in localStorage -->
+    <script>
+      (function () {
+        var dark;
+        try {
+          var stored = localStorage.getItem("theme");
+          dark = stored ? stored === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+        } catch (e) {
+          dark = true;
+        }
+        if (!dark) document.documentElement.classList.add("light");
+      })();
+    </script>
+
+    <!-- The portfolio loads the same stylesheet, so a returning visitor has it cached -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Nunito:wght@400;600;700&display=swap"
+    />
+
     <style>
+      /* Tokens of the brand design system: dark first, light as its own theme */
+      :root {
+        color-scheme: dark;
+        --background: #121212;
+        --foreground: #f5f5f5;
+        --muted-foreground: #a3a3a3;
+        --primary: #f5f5f5;
+        --primary-foreground: #121212;
+        --ring: #737373;
+        --line: rgb(255 255 255 / 0.07);
+        --drop: rgb(255 255 255 / 0.6);
+        --ease-soft: cubic-bezier(0.2, 0, 0, 1);
+      }
+      :root.light {
+        color-scheme: light;
+        --background: #fafafa;
+        --foreground: #171717;
+        --muted-foreground: #666666;
+        --primary: #171717;
+        --primary-foreground: #fafafa;
+        --ring: #858585;
+        --line: rgb(0 0 0 / 0.07);
+        --drop: rgb(0 0 0 / 0.35);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
       body {
+        position: relative;
+        isolation: isolate;
         margin: 0;
         min-height: 100vh;
+        min-height: 100dvh;
         display: grid;
         place-items: center;
-        background: #121212;
-        color: #f5f5f5;
-        font: 16px/1.6 system-ui, sans-serif;
+        padding: 1.5rem;
+        overflow: hidden;
+        background: var(--background);
+        color: var(--foreground);
+        font: 400 1rem/1.6 "Nunito", ui-rounded, system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
       }
-      a {
-        color: inherit;
+
+      /* The three vertical lines with their drop of light, fading out at the bottom */
+      .lines {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        mask-image: linear-gradient(to bottom, black 55%, transparent);
       }
-      @media (prefers-color-scheme: light) {
-        body {
-          background: #fafafa;
-          color: #171717;
+      .lines span {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        overflow: hidden;
+        background: var(--line);
+      }
+      .lines span::after {
+        content: "";
+        position: absolute;
+        top: -30%;
+        left: 0;
+        width: 1px;
+        height: 28%;
+        background: linear-gradient(to bottom, transparent, var(--drop));
+        animation: drop 7s cubic-bezier(0.4, 0.26, 0, 0.97) infinite;
+        animation-delay: inherit;
+      }
+      @keyframes drop {
+        from { top: -30%; }
+        to { top: 110%; }
+      }
+
+      main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .monogram {
+        width: 4rem;
+        height: 4rem;
+        margin-bottom: 1.5rem;
+      }
+      h1 {
+        margin: 0;
+        font: 700 1.75rem/1.15 "Comfortaa", ui-rounded, system-ui, sans-serif;
+        letter-spacing: -0.02em;
+      }
+      p {
+        margin: 0.5rem 0 2rem;
+        font-size: 1.125rem;
+        color: var(--muted-foreground);
+      }
+      .button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        height: 3rem;
+        padding: 0 1.5rem;
+        border-radius: 9999px;
+        background: var(--primary);
+        color: var(--primary-foreground);
+        font-weight: 600;
+        font-size: 0.875rem;
+        line-height: 1;
+        text-decoration: none;
+        transition: transform 150ms var(--ease-soft), background-color 150ms var(--ease-soft);
+      }
+      .button:hover {
+        transform: translateY(-1px);
+        background: color-mix(in srgb, var(--primary) 90%, transparent);
+      }
+      .button:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 50%, transparent);
+      }
+
+      @media (min-width: 768px) {
+        h1 {
+          font-size: 2.25rem;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .lines span::after {
+          display: none;
+        }
+        .button {
+          transition: none;
         }
       }
     </style>
   </head>
   <body>
-    <p><a href="https://fchapoulliep.github.io/portfolio/">Florian Chapoullié-Pino's portfolio</a></p>
+    <div class="lines" aria-hidden="true">
+      <span style="left: 25%; animation-delay: 2s"></span>
+      <span style="left: 50%; animation-delay: 0s"></span>
+      <span style="left: 75%; animation-delay: 2.5s"></span>
+    </div>
+
+    <main>
+      <svg class="monogram" xmlns="http://www.w3.org/2000/svg" viewBox="10 10 106 108" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M 102.30 31.86 A 50 50 0 1 0 102.30 96.14 M 50 50 V 92 M 50 50 H 112 M 50 70 H 84" />
+      </svg>
+      <h1>Florian Chapoullié-Pino</h1>
+      <p>Redirection vers le portfolio…</p>
+      <a class="button" href="https://fchapoulliep.github.io/portfolio/">
+        Ouvrir le portfolio
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14" />
+          <path d="m12 5 7 7-7 7" />
+        </svg>
+      </a>
+    </main>
   </body>
 </html>
