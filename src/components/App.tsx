@@ -21,6 +21,7 @@ import PortfolioPage from "./PortfolioPage";
 import DescriptionPage from "./DescriptionPage";
 import ContactPage from "./ContactPage";
 import ExperiencesPage from "./ExperiencesPage";
+import StaggerReveal from "./StaggerReveal";
 import { PAGES } from "../pageMeta";
 
 /**
@@ -53,6 +54,7 @@ const Layout: React.FC = () => (
   <>
     <ScrollToTopOnNavigate />
     <PageTitle />
+    <StaggerReveal />
     <Cursor />
     <div className="flex min-h-svh flex-col">
       <NavigationBar />

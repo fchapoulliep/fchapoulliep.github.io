@@ -103,6 +103,7 @@ const ExperiencesPage: React.FC = () => {
               key={experience.slug}
               experience={experience}
               index={index}
+              target={hash === `#${experience.slug}`}
               ref={(element) => {
                 experienceRefs.current[index] = element;
               }}

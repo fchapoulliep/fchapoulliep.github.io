@@ -5,7 +5,7 @@
  * the professional ones as a timeline, the personal ones as a showcase.
  */
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { ArrowUpRight } from "lucide-react";
 
 import { buttonClasses } from "./ui/button";
@@ -15,6 +15,7 @@ import {
   personalProjects,
   professionalProjects,
 } from "../data/projects";
+import { prefersReducedMotion } from "../lib/motion";
 
 /**
  * A row of technologies, as small pills
@@ -41,12 +42,77 @@ const Technologies: React.FC<{ names: string[]; className?: string }> = ({
  * the role and what the work was. On a phone the period moves above the
  * company, next to the dot, and the timeline keeps a single column.
  */
-export const ProfessionalProjects: React.FC = () => (
-  <ol className="mt-10 md:mt-12">
+/**
+ * The ink line of the timeline follows a reading line at 60 % of the window,
+ * and the dots it has passed light up. Full and still with less motion.
+ */
+const useTimelineProgress = (timeline: React.RefObject<HTMLOListElement>) => {
+  useEffect(() => {
+    const list = timeline.current;
+    if (!list) {
+      return;
+    }
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const dots = [...list.querySelectorAll<HTMLElement>("[data-dot]")];
+      if (dots.length < 2) {
+        return;
+      }
+      const box = list.getBoundingClientRect();
+      const centers = dots.map((dot) => {
+        const r = dot.getBoundingClientRect();
+        return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+      });
+      const first = centers[0];
+      const last = centers[centers.length - 1];
+      const reading = prefersReducedMotion()
+        ? Infinity
+        : window.innerHeight * 0.6;
+      const progress = Math.min(
+        1,
+        Math.max(0, (reading - first.y) / (last.y - first.y))
+      );
+      list.style.setProperty("--line-top", `${first.y - box.top}px`);
+      list.style.setProperty("--line-left", `${Math.round(first.x - box.left)}px`);
+      list.style.setProperty("--line-height", `${last.y - first.y}px`);
+      list.style.setProperty("--progress", String(progress));
+      dots.forEach((dot, i) =>
+        dot.toggleAttribute("data-reached", centers[i].y <= reading)
+      );
+    };
+    const schedule = () => {
+      frame ||= requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      list
+        .querySelectorAll("[data-reached]")
+        .forEach((dot) => dot.removeAttribute("data-reached"));
+    };
+  }, [timeline]);
+};
+
+export const ProfessionalProjects: React.FC = () => {
+  const timeline = useRef<HTMLOListElement>(null);
+  useTimelineProgress(timeline);
+  return (
+  <ol ref={timeline} data-list="timeline" className="relative mt-10 md:mt-12">
+    <span
+      aria-hidden
+      data-timeline-ink
+      className="pointer-events-none absolute w-px bg-foreground"
+    />
     {professionalProjects.map(
       ({ company, role, period, icon: Icon, highlights, technologies }) => (
         <li
           key={company}
+          data-reveal
           className="group relative grid grid-cols-[2.5rem_minmax(0,1fr)] gap-x-4 pb-10 last:pb-0 md:grid-cols-[9rem_2.5rem_minmax(0,1fr)] md:gap-x-6 md:pb-12"
         >
           {/* The rule runs from this dot down to the next one, under the dot's center */}
@@ -59,7 +125,8 @@ export const ProfessionalProjects: React.FC = () => (
           </p>
           <span
             aria-hidden
-            className="col-start-1 row-start-1 grid size-10 place-items-center rounded-full border border-border-strong bg-card text-foreground md:col-start-2"
+            data-dot
+            className="relative z-10 col-start-1 row-start-1 grid size-10 place-items-center rounded-full border border-border-strong bg-card text-foreground md:col-start-2"
           >
             <Icon strokeWidth={1.75} className="size-4" />
           </span>
@@ -92,7 +159,8 @@ export const ProfessionalProjects: React.FC = () => (
       )
     )}
   </ol>
-);
+  );
+};
 
 /**
  * The personal projects as a showcase: the featured ones as large cards with
@@ -109,6 +177,7 @@ export const PersonalProjects: React.FC = () => {
         {featured.map((project) => (
           <li
             key={project.title}
+            data-reveal
             className="flex flex-col overflow-hidden rounded-lg border border-border bg-card shadow-card transition-[border-color,transform] duration-200 ease-soft hover:-translate-y-0.5 hover:border-border-strong"
           >
             <ZoomableImage
@@ -149,10 +218,11 @@ export const PersonalProjects: React.FC = () => {
           </li>
         ))}
       </ul>
-      <ul className="mt-6 divide-y divide-border rounded-lg border border-border bg-card shadow-card">
+      <ul data-list="rows" className="mt-6 divide-y divide-border rounded-lg border border-border bg-card shadow-card">
         {listed.map(({ title, description, image, alt, icon: Icon, technologies }) => (
           <li
             key={title}
+            data-reveal
             className="grid grid-cols-[5rem_minmax(0,1fr)] items-center gap-x-4 gap-y-1 px-4 py-4 md:px-6 lg:grid-cols-[6rem_14rem_minmax(0,1fr)] lg:gap-x-6"
           >
             {/* On a phone the frame spans the title and its detail, level with the title */}

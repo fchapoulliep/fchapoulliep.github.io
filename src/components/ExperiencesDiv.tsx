@@ -19,6 +19,8 @@ interface ExperiencesDivProps {
   experience: Experience;
   /** Position in the list, from 0 */
   index: number;
+  /** Opened from the home index: it shows at once and receives the number and title that fly from there */
+  target?: boolean;
 }
 
 /**
@@ -28,9 +30,9 @@ export const experienceNumber = (index: number) =>
   String(index + 1).padStart(2, "0");
 
 const ExperiencesDiv = forwardRef<HTMLElement, ExperiencesDivProps>(
-  ({ experience, index }, ref) => {
+  ({ experience, index, target = false }, ref) => {
     const { slug, title, image, imageFit, report, paragraphs } = experience;
-    const [revealRef, visible] = useReveal<HTMLDivElement>();
+    const [revealRef, visible] = useReveal<HTMLDivElement>(target);
     // On a phone only the first paragraph shows until "Lire la suite": nine full
     // texts make the page eleven screens long
     const [expanded, setExpanded] = useState(false);
@@ -60,10 +62,22 @@ const ExperiencesDiv = forwardRef<HTMLElement, ExperiencesDivProps>(
           />
           <div className="md:col-span-7">
             <p className="text-xs font-semibold tracking-[0.14em] text-muted-foreground tabular-nums">
-              {experienceNumber(index)}
+              {/* The shared elements are sized to their text, not to the column,
+                  or the view transition would stretch the index title to the column width */}
+              <span
+                className="inline-block"
+                style={target ? { viewTransitionName: "exp-num" } : undefined}
+              >
+                {experienceNumber(index)}
+              </span>
             </p>
             <h3 id={`${slug}-title`} className="mt-1 text-xl md:text-2xl">
-              {title}
+              <span
+                className="inline-block"
+                style={target ? { viewTransitionName: "exp-title" } : undefined}
+              >
+                {title}
+              </span>
             </h3>
             <div className="mt-4 max-w-prose space-y-4 leading-relaxed">
               {paragraphs.map((paragraph, i) => (

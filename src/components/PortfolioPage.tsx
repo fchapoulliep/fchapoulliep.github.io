@@ -29,6 +29,21 @@ import { RESUME_URL } from "../config";
 import { scrollToElement } from "../services/scrollToTopService";
 
 /**
+ * The clicked entry lends its number and title to the section they open, as
+ * shared elements of the view transition. Named on click only: two elements
+ * may not share a name.
+ */
+const nameSharedElements = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  const link = event.currentTarget;
+  link
+    .querySelector<HTMLElement>("[data-vt=num]")
+    ?.style.setProperty("view-transition-name", "exp-num");
+  link
+    .querySelector<HTMLElement>("[data-vt=title]")
+    ?.style.setProperty("view-transition-name", "exp-title");
+};
+
+/**
  * PortfolioPage component that returns the home page of the portfolio website
  * @returns PortfolioPage component
  */
@@ -127,18 +142,20 @@ const PortfolioPage: React.FC = () => {
           Projets scolaires
         </SectionTitle>
         {/* Only an index here: each entry opens the reports page at its section */}
-        <ol className="mt-10 grid rounded-lg border border-border bg-card p-2 shadow-card sm:grid-cols-2 md:mt-12 lg:grid-cols-3">
+        <ol data-list="index" className="mt-10 grid rounded-lg border border-border bg-card p-2 shadow-card sm:grid-cols-2 md:mt-12 lg:grid-cols-3">
           {experiences.map(({ slug, title }, index) => (
-            <li key={slug}>
+            <li key={slug} data-reveal>
               <Link
                 to={`/retours-experience#${slug}`}
+                viewTransition
+                onClick={nameSharedElements}
                 className="group flex min-h-11 items-center gap-3 rounded-md px-4 py-3 transition-colors duration-150 ease-soft hover:bg-accent"
               >
-                <span className="text-xs font-semibold text-muted-foreground tabular-nums">
+                <span data-vt="num" className="text-xs font-semibold text-muted-foreground tabular-nums">
                   {experienceNumber(index)}
                 </span>{" "}
                 {/* The space keeps "07 Symfony" apart for screen readers; flex hides it */}
-                <span className="font-semibold">{title}</span>
+                <span data-vt="title" className="font-semibold">{title}</span>
                 <ArrowRight
                   aria-hidden
                   strokeWidth={1.75}
@@ -150,6 +167,7 @@ const PortfolioPage: React.FC = () => {
         </ol>
         <Link
           to="/retours-experience"
+          viewTransition
           className={buttonClasses({ variant: "outline", className: "mt-6" })}
         >
           Tous les retours d'expérience

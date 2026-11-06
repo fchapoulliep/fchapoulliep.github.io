@@ -4,12 +4,15 @@ import { useEffect, useRef, useState } from "react";
  * Whether an element has entered the window once, to fade it in as the page
  * scrolls. Without IntersectionObserver the element shows right away.
  */
-export const useReveal = <T extends HTMLElement>() => {
+export const useReveal = <T extends HTMLElement>(initiallyVisible = false) => {
   const ref = useRef<T>(null);
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(initiallyVisible);
 
   useEffect(() => {
     const element = ref.current;
+    if (initiallyVisible) {
+      return;
+    }
     if (!element || !("IntersectionObserver" in window)) {
       setVisible(true);
       return;
@@ -27,7 +30,7 @@ export const useReveal = <T extends HTMLElement>() => {
     );
     observer.observe(element);
     return () => observer.disconnect();
-  }, []);
+  }, [initiallyVisible]);
 
   return [ref, visible] as const;
 };

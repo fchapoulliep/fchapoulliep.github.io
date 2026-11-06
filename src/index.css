@@ -234,3 +234,109 @@
   -webkit-mask-composite: source-in;
   mask-composite: intersect;
 }
+
+/*
+ * Motion of the home page and its lists (charter, "Mouvement"). Everything
+ * stays still when the system asks for less motion.
+ */
+
+/* Lively lists: hovering a row fades its neighbours, the index arrow slides.
+   Only with a mouse; the keyboard gets the same through :focus-visible */
+@media (hover: hover) and (pointer: fine) {
+  [data-list] > li {
+    transition:
+      opacity 200ms var(--ease-soft),
+      background-color 200ms var(--ease-soft);
+  }
+  [data-list]:has(> li:hover) > li:not(:hover) {
+    opacity: 0.5;
+  }
+  [data-list="rows"] {
+    overflow: hidden;
+  }
+  [data-list="rows"] > li:hover {
+    background-color: var(--accent);
+  }
+}
+[data-list]:has(> li :focus-visible) > li:not(:focus-within) {
+  opacity: 0.5;
+}
+[data-list="index"] a svg {
+  transition:
+    color 150ms var(--ease-soft),
+    translate 200ms var(--ease-soft);
+}
+[data-list="index"] a:is(:hover, :focus-visible) svg {
+  translate: 0.25rem 0;
+}
+
+/* The timeline draws itself: an ink line over the grey rule follows the
+   scroll (ProjectSections), and each dot lights up when the line reaches it */
+[data-timeline-ink] {
+  top: var(--line-top, 0);
+  left: var(--line-left, 0);
+  height: var(--line-height, 0);
+  transform: scaleY(var(--progress, 0));
+  transform-origin: top;
+}
+[data-dot] {
+  transition:
+    background-color 200ms var(--ease-soft),
+    border-color 200ms var(--ease-soft),
+    color 200ms var(--ease-soft);
+}
+[data-dot][data-reached] {
+  background-color: var(--foreground);
+  border-color: var(--foreground);
+  color: var(--background);
+}
+
+/* From the home index to the reports: the page cross-fades, the clicked
+   number and title move to their section */
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.theme-vt)::view-transition-group(*) {
+    animation-duration: 320ms;
+    animation-timing-function: var(--ease-soft);
+  }
+  html:not(.theme-vt)::view-transition-old(root),
+  html:not(.theme-vt)::view-transition-new(root) {
+    animation-duration: 250ms;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* The theme opens as a circle from its button: the circle is drawn by
+   ThemeToggle, so the default cross-fade is off, and no part of the page
+   escapes it with a name of its own */
+html.theme-vt::view-transition-old(root),
+html.theme-vt::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+html.theme-vt * {
+  view-transition-name: none !important;
+}
+
+/* Staggered entrance (StaggerReveal): the fade and 8 px of the charter,
+   300 ms, 50 ms apart */
+@keyframes stagger-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html[data-stagger] [data-reveal]:not([data-revealed]) {
+    opacity: 0;
+  }
+  html[data-stagger] [data-reveal][data-revealed] {
+    animation: stagger-rise 300ms var(--ease-soft) backwards;
+    animation-delay: calc(var(--stagger, 0) * 50ms);
+  }
+}
