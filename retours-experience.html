@@ -1,0 +1,108 @@
+<!--
+  This is the main HTML file for the portfolio website.
+  It contains the structure and content of the web page.
+-->
+
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <!-- Meta tags -->
+    <meta charset="utf-8" />
+    <link rel="icon" href="/portfolio/favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="icon" href="/portfolio/logos/icon-192.png" type="image/png" sizes="192x192" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- The browser's bar takes the color of the theme shown (set below and by the toggle) -->
+    <meta name="theme-color" content="#121212" />
+
+    <!--
+      Theme set before the first paint: dark, unless the visitor chose light
+      with the toggle. The system's theme is not followed (Florian, 2026-11-06).
+    -->
+    <script>
+      (function () {
+        var dark = true;
+        try {
+          dark = localStorage.getItem("theme") !== "light";
+        } catch (e) {}
+        document.documentElement.classList.toggle("dark", dark);
+        if (!dark) {
+          document
+            .querySelector('meta[name="theme-color"]')
+            .setAttribute("content", "#fafafa");
+        }
+      })();
+    </script>
+
+    <!-- Fonts of the design system: Comfortaa for the titles, Nunito for the text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Nunito:wght@400;600;700&display=swap"
+    />
+    <meta name="description" content="Les projets scolaires de Florian Chapoullié-Pino, développeur full-stack IA : ce que chacun lui a appris, avec son retour d'expérience complet en PDF." />
+
+    <!-- SEO tags -->
+    <meta
+      name="keywords"
+      content="Florian Chapoullié-Pino, portfolio, développeur, full-stack, web, informatique, La Rochelle, étudiant, projets, compétences"
+    />
+    <meta name="author" content="Florian Chapoullié-Pino" />
+    <meta name="google-site-verification" content="xJBDW7QGBJ91iklZu2RWSRQztWcXCL3t-QnV8VSh4oA" />
+
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="Retours d'expérience | Florian Chapoullié-Pino" />
+    <meta property="og:description" content="Les projets scolaires de Florian Chapoullié-Pino, développeur full-stack IA : ce que chacun lui a appris, avec son retour d'expérience complet en PDF." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://fchapoulliep.github.io/portfolio/retours-experience" />
+    <meta
+      property="og:image"
+      content="https://fchapoulliep.github.io/portfolio/og.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Florian Chapoullié-Pino" />
+    <meta property="og:locale" content="fr_FR" />
+
+    <!--
+      Site name for Google. It is read on the domain root, which redirects here, so this block
+      must stay identical to the one in the fchapoulliep.github.io repository.
+    -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Florian Chapoullié-Pino",
+        "alternateName": "fchapoulliep.github.io",
+        "url": "https://fchapoulliep.github.io/"
+      }
+    </script>
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Canonical link -->
+    <link rel="canonical" href="https://fchapoulliep.github.io/portfolio/retours-experience" />
+
+    <!-- Apple touch icon -->
+    <link
+      rel="apple-touch-icon"
+      href="/portfolio/apple-icon.png"
+    />
+
+    <!-- Manifest file -->
+    <link rel="manifest" href="/portfolio/manifest.json" />
+
+    <!-- Page title -->
+    <title>Retours d'expérience | Florian Chapoullié-Pino</title>
+    <script type="module" crossorigin src="/portfolio/assets/index-B6-B2IAe.js"></script>
+    <link rel="stylesheet" crossorigin href="/portfolio/assets/index-DqU0WdoG.css">
+  </head>
+  <body>
+    <!-- JavaScript fallback message -->
+    <noscript>Activez JavaScript pour afficher ce portfolio.</noscript>
+
+    <!-- Root element -->
+    <div id="root"></div>
+  </body>
+</html>
