@@ -2,7 +2,8 @@
  * PortfolioPage.tsx
  * @file PortfolioPage.tsx
  * @description Home page of the portfolio: the welcome screen, then the
- * experiences, with a sticky table of contents on large screens.
+ * professional, personal and school projects; the school ones with a sticky
+ * table of contents on large screens.
  */
 
 import React, { useEffect, useRef, useState } from "react";
@@ -12,6 +13,7 @@ import BackgroundLines from "./brand/BackgroundLines";
 import Watermark from "./brand/Watermark";
 import SectionTitle from "./brand/SectionTitle";
 import ExperiencesDiv, { experienceNumber } from "./ExperiencesDiv";
+import { PersonalProjects, ProfessionalProjects } from "./ProjectSections";
 import { buttonClasses } from "./ui/button";
 import { experiences } from "../data/experiences";
 import { RESUME_URL } from "../config";
@@ -69,23 +71,24 @@ const PortfolioPage: React.FC = () => {
             Florian <span className="whitespace-nowrap">Chapoullié-Pino</span>
           </h1>
           <p className="mt-4 text-lg text-muted-foreground md:text-xl">
-            Développeur Full-Stack
+            Développeur Full-Stack IA
           </p>
           <p className="mt-6 max-w-prose leading-relaxed">
-            Je suis un étudiant en 2e année de Master Informatique à
-            l'Université de La Rochelle. Passionné par le développement web et
-            les nouvelles technologies, j'aime concevoir des solutions qui
-            facilitent les tâches répétitives du quotidien.
+            Actuellement en alternance chez Leveria en tant que développeur
+            full-stack IA, je suis en 2e année de Master Informatique
+            (Architecte logiciel) à La Rochelle Université. Passionné par le
+            développement web et l'intelligence artificielle, j'aime concevoir
+            des solutions qui facilitent les tâches répétitives du quotidien.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <button
               type="button"
               onClick={() =>
-                scrollToElement(document.getElementById("experiences"))
+                scrollToElement(document.getElementById("projets"))
               }
               className={buttonClasses()}
             >
-              Voir mes expériences
+              Voir mes projets
               <ArrowDown strokeWidth={1.75} />
             </button>
             <a
@@ -104,7 +107,7 @@ const PortfolioPage: React.FC = () => {
           type="button"
           aria-label="Découvrir mes projets"
           onClick={() =>
-            scrollToElement(document.getElementById("experiences"))
+            scrollToElement(document.getElementById("projets"))
           }
           className="absolute bottom-[max(1rem,env(safe-area-inset-bottom))] left-1/2 grid size-11 -translate-x-1/2 place-items-center rounded-full text-muted-foreground transition-colors duration-200 ease-soft hover:text-foreground"
         >
@@ -116,12 +119,29 @@ const PortfolioPage: React.FC = () => {
       </section>
 
       <section
+        id="projets"
+        aria-labelledby="pro-title"
+        className="mx-auto max-w-6xl scroll-mt-16 px-6 pt-16 md:pt-20"
+      >
+        <SectionTitle id="pro-title">Projets professionnels</SectionTitle>
+        <ProfessionalProjects />
+      </section>
+
+      <section
+        aria-labelledby="perso-title"
+        className="mx-auto max-w-6xl px-6 pt-16 md:pt-20"
+      >
+        <SectionTitle id="perso-title">Projets personnels</SectionTitle>
+        <PersonalProjects />
+      </section>
+
+      <section
         id="experiences"
         aria-labelledby="experiences-title"
         className="scroll-mt-16 pt-16 pb-20 md:pt-20 md:pb-24"
       >
         <div className="mx-auto max-w-6xl px-6">
-          <SectionTitle id="experiences-title">Mes expériences</SectionTitle>
+          <SectionTitle id="experiences-title">Projets scolaires</SectionTitle>
           <div className="mt-10 md:mt-12 xl:grid xl:grid-cols-[10rem_minmax(0,1fr)] xl:gap-10">
             <nav
               aria-label="Sommaire des expériences"

@@ -17,7 +17,7 @@ const SiteFooter: React.FC = () => (
           <p className="font-display text-base font-bold">
             Florian Chapoullié-Pino
           </p>
-          <p className="text-sm text-muted-foreground">Développeur Full-Stack</p>
+          <p className="text-sm text-muted-foreground">Développeur Full-Stack IA</p>
         </div>
       </div>
       <div className="flex items-center gap-3">

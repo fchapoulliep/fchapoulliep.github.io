@@ -21,13 +21,13 @@ export const PAGES: PageMeta[] = [
     path: "",
     title: "Portfolio de Florian Chapoullié-Pino",
     description:
-      "Explorez le portfolio de Florian Chapoullié-Pino, un développeur full-stack en devenir étudiant à l'Université de La Rochelle. Découvrez des projets, des compétences et bien plus encore !",
+      "Portfolio de Florian Chapoullié-Pino, développeur full-stack IA en alternance chez Leveria et étudiant en Master Informatique à La Rochelle Université : projets professionnels, personnels et scolaires.",
   },
   {
     path: "about",
     title: "À propos | Florian Chapoullié-Pino",
     description:
-      "Le parcours de Florian Chapoullié-Pino, étudiant en Master Informatique à l'Université de La Rochelle, et ses projets personnels : encyclopédies 3D, Pokédex 3D et sites web.",
+      "Le parcours de Florian Chapoullié-Pino, développeur full-stack IA en alternance chez Leveria et étudiant en Master Informatique à La Rochelle Université.",
   },
   {
     path: "contact",
