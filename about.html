@@ -11,30 +11,25 @@
     <link rel="icon" href="/portfolio/favicon.ico" sizes="16x16 32x32 48x48" />
     <link rel="icon" href="/portfolio/logos/icon-192.png" type="image/png" sizes="192x192" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="theme-color"
-      media="(prefers-color-scheme: light)"
-      content="#fafafa"
-    />
-    <meta
-      name="theme-color"
-      media="(prefers-color-scheme: dark)"
-      content="#121212"
-    />
+    <!-- The browser's bar takes the color of the theme shown (set below and by the toggle) -->
+    <meta name="theme-color" content="#121212" />
 
-    <!-- Theme set before the first paint: the visitor's choice, or else the system's -->
+    <!--
+      Theme set before the first paint: dark, unless the visitor chose light
+      with the toggle. The system's theme is not followed (Florian, 2026-11-06).
+    -->
     <script>
       (function () {
-        var dark;
+        var dark = true;
         try {
-          var stored = localStorage.getItem("theme");
-          dark = stored
-            ? stored === "dark"
-            : matchMedia("(prefers-color-scheme: dark)").matches;
-        } catch (e) {
-          dark = true;
-        }
+          dark = localStorage.getItem("theme") !== "light";
+        } catch (e) {}
         document.documentElement.classList.toggle("dark", dark);
+        if (!dark) {
+          document
+            .querySelector('meta[name="theme-color"]')
+            .setAttribute("content", "#fafafa");
+        }
       })();
     </script>
 
@@ -100,7 +95,7 @@
 
     <!-- Page title -->
     <title>À propos | Florian Chapoullié-Pino</title>
-    <script type="module" crossorigin src="/portfolio/assets/index-BTStysSe.js"></script>
+    <script type="module" crossorigin src="/portfolio/assets/index-D06SRXo3.js"></script>
     <link rel="stylesheet" crossorigin href="/portfolio/assets/index-CXAN9y2R.css">
   </head>
   <body>
