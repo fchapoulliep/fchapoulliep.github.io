@@ -7,14 +7,13 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ArrowUpRight, ChevronDown, FileText, Menu, X } from "lucide-react";
+import { FileText, Menu, X } from "lucide-react";
 
 import Logo from "./brand/Logo";
 import SocialLinks from "./SocialLinks";
 import ThemeToggle from "./ThemeToggle";
 import { buttonClasses } from "./ui/button";
 import { cn } from "../lib/cn";
-import { experiences } from "../data/experiences";
 import { RESUME_URL } from "../config";
 import handleScrollTop from "../services/scrollToTopService";
 
@@ -29,96 +28,6 @@ const pages = [
  */
 const navItemClasses =
   "inline-flex h-10 items-center gap-1 rounded-full px-3.5 text-sm font-semibold text-muted-foreground transition-colors duration-150 ease-soft hover:bg-accent hover:text-foreground aria-[current=page]:text-foreground aria-expanded:bg-accent aria-expanded:text-foreground";
-
-/**
- * Drop-down list of the experience reports, in the desktop bar. A disclosure
- * of plain links rather than an ARIA menu: Tab goes through them in order.
- */
-const ReportsMenu: React.FC = () => {
-  const [open, setOpen] = useState(false);
-  const rootRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (!open) {
-      return;
-    }
-    const handlePointerDown = (e: PointerEvent) => {
-      if (!rootRef.current?.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setOpen(false);
-        buttonRef.current?.focus();
-      }
-    };
-    document.addEventListener("pointerdown", handlePointerDown);
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("pointerdown", handlePointerDown);
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [open]);
-
-  return (
-    <div
-      ref={rootRef}
-      className="relative"
-      // Tabbing out of the list closes it
-      onBlur={(e) => {
-        if (!rootRef.current?.contains(e.relatedTarget as Node | null)) {
-          setOpen(false);
-        }
-      }}
-    >
-      <button
-        ref={buttonRef}
-        type="button"
-        aria-expanded={open}
-        aria-controls="reports-menu"
-        onClick={() => setOpen((value) => !value)}
-        className={navItemClasses}
-      >
-        Retours d'expérience
-        <ChevronDown
-          strokeWidth={1.75}
-          className={cn(
-            "size-4 transition-transform duration-200 ease-soft",
-            open && "rotate-180"
-          )}
-        />
-      </button>
-      {open && (
-        <div
-          id="reports-menu"
-          className="absolute top-full left-1/2 mt-2 w-64 -translate-x-1/2 animate-enter rounded-lg border border-border bg-popover p-1.5 text-popover-foreground shadow-float"
-        >
-          <ul>
-            {experiences.map(({ slug, title, report }) => (
-              <li key={slug}>
-                <a
-                  href={report}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setOpen(false)}
-                  className="flex items-center justify-between gap-3 rounded-md px-3 py-2 text-sm transition-colors duration-150 ease-soft hover:bg-accent"
-                >
-                  {title}
-                  <ArrowUpRight
-                    strokeWidth={1.75}
-                    className="size-4 text-muted-foreground"
-                  />
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
-  );
-};
 
 /**
  * NavigationBar component
@@ -136,11 +45,6 @@ const NavigationBar: React.FC = () => {
    * Whether the mobile menu (burger) is open
    */
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  // Reports list folded inside the mobile menu, closed again with the menu
-  const [mobileReportsOpen, setMobileReportsOpen] = useState(false);
-  useEffect(() => {
-    if (!mobileMenuOpen) setMobileReportsOpen(false);
-  }, [mobileMenuOpen]);
   const burgerRef = useRef<HTMLButtonElement>(null);
   const firstMobileLinkRef = useRef<HTMLAnchorElement>(null);
 
@@ -228,7 +132,6 @@ const NavigationBar: React.FC = () => {
                 {label}
               </Link>
             ))}
-            <ReportsMenu />
           </nav>
 
           <div className="flex items-center gap-2">
@@ -302,48 +205,6 @@ const NavigationBar: React.FC = () => {
                   </Link>
                 </li>
               ))}
-              <li>
-                <button
-                  type="button"
-                  aria-expanded={mobileReportsOpen}
-                  aria-controls="mobile-menu-reports"
-                  onClick={() => setMobileReportsOpen((open) => !open)}
-                  className="flex h-11 w-full items-center justify-between rounded-md px-3 font-semibold text-muted-foreground transition-colors duration-150 ease-soft hover:bg-accent hover:text-foreground"
-                >
-                  Retours d'expérience
-                  <ChevronDown
-                    strokeWidth={1.75}
-                    className={cn(
-                      "size-4 transition-transform duration-200 ease-soft",
-                      mobileReportsOpen && "rotate-180"
-                    )}
-                  />
-                </button>
-                {mobileReportsOpen && (
-                  <ul
-                    id="mobile-menu-reports"
-                    className="mb-1 ml-3 animate-enter border-l border-border pl-2"
-                  >
-                    {experiences.map(({ slug, title, report }) => (
-                      <li key={slug}>
-                        <a
-                          href={report}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={() => setMobileMenuOpen(false)}
-                          className="flex min-h-11 items-center justify-between gap-3 rounded-md px-3 text-sm transition-colors duration-150 ease-soft hover:bg-accent"
-                        >
-                          {title}
-                          <ArrowUpRight
-                            strokeWidth={1.75}
-                            className="size-4 shrink-0 text-muted-foreground"
-                          />
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </li>
             </ul>
 
             <div className="mt-2 flex items-center justify-between gap-3 border-t border-border px-1 pt-3 pb-1">
