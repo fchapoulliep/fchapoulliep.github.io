@@ -9,6 +9,7 @@ import {
   Building2,
   Clapperboard,
   FlaskConical,
+  Image as ImageIcon,
   Music,
   type LucideIcon,
 } from "lucide-react";
@@ -155,6 +156,18 @@ export const personalProjects: PersonalProject[] = [
       "Chatterbox",
       "Orpheus (LoRA)",
       "FFmpeg",
+    ],
+  },
+  {
+    title: "Génération d'images",
+    icon: ImageIcon,
+    technologies: [
+      "ComfyUI",
+      "SDXL",
+      "LoRA",
+      "Inpainting",
+      "Real-ESRGAN",
+      "BiRefNet",
     ],
   },
   {
