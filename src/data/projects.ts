@@ -9,7 +9,6 @@ import {
   Building2,
   Clapperboard,
   FlaskConical,
-  Map as MapIcon,
   Music,
   type LucideIcon,
 } from "lucide-react";
@@ -157,11 +156,6 @@ export const personalProjects: PersonalProject[] = [
       "Orpheus (LoRA)",
       "FFmpeg",
     ],
-  },
-  {
-    title: "FestivApp",
-    icon: MapIcon,
-    technologies: ["TypeScript", "React", "Leaflet", "Open data"],
   },
   {
     title: "Générateur de musique",
