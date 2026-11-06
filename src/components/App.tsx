@@ -5,12 +5,12 @@
  * @see {@link https://reactrouter.com/}
  */
 
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
-  BrowserRouter as Router,
+  createBrowserRouter,
   Navigate,
-  Route,
-  Routes,
+  Outlet,
+  RouterProvider,
   useLocation,
 } from "react-router-dom";
 
@@ -47,32 +47,62 @@ const PageTitle: React.FC = () => {
 };
 
 /**
- * The main component of the portfolio application. The pages live under the
- * base path of the site (/portfolio/ on GitHub Pages).
+ * What every page shares: the bar, the footer and the cursor
  */
-const App: React.FC = () => (
-  <Router
-    basename={import.meta.env.BASE_URL}
-    future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-  >
+const Layout: React.FC = () => (
+  <>
     <ScrollToTopOnNavigate />
     <PageTitle />
     <Cursor />
     <div className="flex min-h-svh flex-col">
       <NavigationBar />
       <main className="flex-1">
-        <Routes>
-          <Route path="/" element={<PortfolioPage />} />
-          <Route path="/about" element={<DescriptionPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          {/* Reached from the home page index, not from the navigation bar */}
-          <Route path="/retours-experience" element={<ExperiencesPage />} />
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
+        <Outlet />
       </main>
       <SiteFooter />
     </div>
-  </Router>
+  </>
 );
+
+/**
+ * The pages live under the base path of the site (/portfolio/ on GitHub
+ * Pages). A data router, not BrowserRouter: only RouterProvider runs the view
+ * transitions that <Link viewTransition> asks for.
+ */
+const createRouter = () =>
+  createBrowserRouter(
+    [
+      {
+        element: <Layout />,
+        children: [
+          { path: "/", element: <PortfolioPage /> },
+          { path: "/about", element: <DescriptionPage /> },
+          { path: "/contact", element: <ContactPage /> },
+          // Reached from the home page index, not from the navigation bar
+          { path: "/retours-experience", element: <ExperiencesPage /> },
+          { path: "*", element: <Navigate to="/" /> },
+        ],
+      },
+    ],
+    {
+      basename: import.meta.env.BASE_URL,
+      future: {
+        v7_relativeSplatPath: true,
+        v7_fetcherPersist: true,
+        v7_normalizeFormMethod: true,
+        v7_partialHydration: true,
+        v7_skipActionErrorRevalidation: true,
+      },
+    }
+  );
+
+/**
+ * The main component of the portfolio application
+ */
+const App: React.FC = () => {
+  // One router per mounted app, created from the address of that moment
+  const [router] = useState(createRouter);
+  return <RouterProvider router={router} future={{ v7_startTransition: true }} />;
+};
 
 export default App;
