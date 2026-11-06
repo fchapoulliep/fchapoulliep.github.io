@@ -31,20 +31,23 @@
       }
     </script>
 
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fafafa" />
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#121212" />
+    <meta name="theme-color" content="#121212" />
 
-    <!-- Same origin as the portfolio, so the visitor's theme choice is already in localStorage -->
+    <!--
+      Same rule as the portfolio: dark, unless the visitor chose light with its toggle
+      (same origin, so the choice is already in localStorage). The system's theme is not
+      followed (Florian, 2026-11-06).
+    -->
     <script>
       (function () {
-        var dark;
+        var light = false;
         try {
-          var stored = localStorage.getItem("theme");
-          dark = stored ? stored === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-        } catch (e) {
-          dark = true;
+          light = localStorage.getItem("theme") === "light";
+        } catch (e) {}
+        if (light) {
+          document.documentElement.classList.add("light");
+          document.querySelector('meta[name="theme-color"]').setAttribute("content", "#fafafa");
         }
-        if (!dark) document.documentElement.classList.add("light");
       })();
     </script>
 
