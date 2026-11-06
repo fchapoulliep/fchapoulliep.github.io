@@ -290,6 +290,22 @@
   border-color: var(--foreground);
   color: var(--background);
 }
+/* A logo is not inverted: it waits in grey and comes to its colours when the
+   line reaches it, with a ring in ink around its white disc */
+[data-dot] img {
+  transition:
+    filter 300ms var(--ease-soft),
+    opacity 300ms var(--ease-soft);
+}
+[data-dot]:not([data-reached]) img {
+  filter: grayscale(1);
+  opacity: 0.55;
+}
+[data-dot][data-reached]:has(img) {
+  background-color: white;
+  outline: 1px solid var(--foreground);
+  outline-offset: 3px;
+}
 
 /* From the home index to the reports: the page cross-fades, the clicked
    number and title move to their section */

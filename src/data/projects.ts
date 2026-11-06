@@ -10,7 +10,7 @@ import {
   Clapperboard,
   FlaskConical,
   Image as ImageIcon,
-  Music,
+  AudioWaveform,
   type LucideIcon,
 } from "lucide-react";
 
@@ -18,6 +18,13 @@ import fah from "../images/fah.webp";
 import chp from "../images/chp-services.webp";
 import pokedex3d from "../images/3dpokedex.webp";
 import dex3dMosaic from "../images/dex3d-mosaic.webp";
+import WaveformArt from "../components/brand/WaveformArt";
+
+/**
+ * The official square logos of the companies and tools, in public/logos/.
+ * They belong to their brands and only identify them.
+ */
+const logo = (file: string) => `${import.meta.env.BASE_URL}logos/${file}`;
 
 /**
  * A professional experience, most recent first
@@ -28,6 +35,8 @@ export interface ProfessionalProject {
   period: string;
   /** Drawn in the dot of the timeline: a company, a laboratory */
   icon: LucideIcon;
+  /** The company's official square logo, in its colours, in place of the icon */
+  logo?: string;
   /** What the work was, as short lines; none when only the role is public */
   highlights?: { title: string; detail: string }[];
   technologies?: string[];
@@ -39,12 +48,14 @@ export const professionalProjects: ProfessionalProject[] = [
     role: "Alternance, développeur full-stack IA",
     period: "En cours",
     icon: Building2,
+    logo: logo("leveria.jpg"),
   },
   {
     company: "Laboratoire L3I, La Rochelle Université",
     role: "Stage, recherche en analyse de données et IA",
     period: "Avril à juin 2026",
     icon: FlaskConical,
+    logo: logo("l3i.png"),
     highlights: [
       {
         title: "Projet Habimob",
@@ -68,6 +79,7 @@ export const professionalProjects: ProfessionalProject[] = [
     role: "Stage, développeur front-end",
     period: "Février à juin 2025",
     icon: Building2,
+    logo: logo("rhinov.svg"),
     highlights: [
       {
         title: "Montée en version du back-office",
@@ -98,6 +110,12 @@ export interface PersonalProject {
   alt?: string;
   /** Stands for a project without a screenshot on its row */
   icon?: LucideIcon;
+  /** The logo of the project's central tool, filling its frame */
+  logo?: string;
+  /** The background the logo was drawn on, carried to the whole frame */
+  logoBackground?: string;
+  /** A drawing in ink that fills the frame, for a project without a logo */
+  art?: React.FC<{ className?: string }>;
   technologies?: string[];
   /** The live sites, when the project has one to show */
   links?: { label: string; href: string }[];
@@ -147,6 +165,8 @@ export const personalProjects: PersonalProject[] = [
   {
     title: "Montage vidéo automatisé",
     icon: Clapperboard,
+    logo: logo("remotion.png"),
+    logoBackground: "#ffffff",
     technologies: [
       "TypeScript",
       "Remotion",
@@ -161,6 +181,8 @@ export const personalProjects: PersonalProject[] = [
   {
     title: "Génération d'images",
     icon: ImageIcon,
+    logo: logo("comfyui.svg"),
+    logoBackground: "#211927",
     technologies: [
       "ComfyUI",
       "SDXL",
@@ -172,7 +194,9 @@ export const personalProjects: PersonalProject[] = [
   },
   {
     title: "Générateur de musique",
-    icon: Music,
+    // No logo of its own for MusicGen: a sound wave in ink
+    icon: AudioWaveform,
+    art: WaveformArt,
     technologies: ["Python", "Flask", "Docker", "MusicGen"],
   },
 ];

@@ -109,7 +109,7 @@ export const ProfessionalProjects: React.FC = () => {
       className="pointer-events-none absolute w-px bg-foreground"
     />
     {professionalProjects.map(
-      ({ company, role, period, icon: Icon, highlights, technologies }) => (
+      ({ company, role, period, icon: Icon, logo, highlights, technologies }) => (
         <li
           key={company}
           data-reveal
@@ -126,9 +126,17 @@ export const ProfessionalProjects: React.FC = () => {
           <span
             aria-hidden
             data-dot
-            className="relative z-10 col-start-1 row-start-1 grid size-10 place-items-center rounded-full border border-border-strong bg-card text-foreground md:col-start-2"
+            className={cn(
+              "relative z-10 col-start-1 row-start-1 grid size-10 place-items-center overflow-hidden rounded-full border border-border-strong text-foreground md:col-start-2",
+              // A logo keeps the white it was drawn for, in both themes
+              logo ? "bg-white" : "bg-card"
+            )}
           >
-            <Icon strokeWidth={1.75} className="size-4" />
+            {logo ? (
+              <img src={logo} alt="" className="size-full object-contain p-1.5" />
+            ) : (
+              <Icon strokeWidth={1.75} className="size-4" />
+            )}
           </span>
           <div className="col-start-2 md:col-start-3 md:row-start-1">
             {/* As high as the dot, so the company sits level with it and the period */}
@@ -219,7 +227,7 @@ export const PersonalProjects: React.FC = () => {
         ))}
       </ul>
       <ul data-list="rows" className="mt-6 divide-y divide-border rounded-lg border border-border bg-card shadow-card">
-        {listed.map(({ title, description, image, alt, icon: Icon, technologies }) => (
+        {listed.map(({ title, description, image, alt, icon: Icon, logo, logoBackground, art: Art, technologies }) => (
           <li
             key={title}
             data-reveal
@@ -235,12 +243,20 @@ export const PersonalProjects: React.FC = () => {
                   className="aspect-[1200/572] rounded-md border border-border"
                 />
               ) : (
-                Icon && (
+                (logo || Art || Icon) && (
                   <span
                     aria-hidden
-                    className="grid aspect-[1200/572] place-items-center rounded-md border border-border bg-muted text-muted-foreground"
+                    style={logo ? { backgroundColor: logoBackground } : undefined}
+                    className="relative grid aspect-[1200/572] place-items-center overflow-hidden rounded-md border border-border bg-muted text-foreground"
                   >
-                    <Icon strokeWidth={1.75} className="size-5" />
+                    {/* The logo fills the frame's height on its own background, like a screenshot */}
+                    {logo ? (
+                      <img src={logo} alt="" className="absolute inset-0 size-full object-contain" />
+                    ) : Art ? (
+                      <Art className="size-full px-1 py-1.5" />
+                    ) : (
+                      Icon && <Icon strokeWidth={1.75} className="size-6 lg:size-7" />
+                    )}
                   </span>
                 )
               )}
