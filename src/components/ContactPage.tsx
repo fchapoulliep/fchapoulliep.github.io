@@ -217,7 +217,8 @@ const ContactPage: React.FC = () => {
   return (
     <div className="relative isolate overflow-hidden">
       <Watermark className="top-10 -right-[14%] h-[24rem] md:h-[34rem]" />
-      <div className="mx-auto grid max-w-6xl gap-12 px-6 pt-28 pb-24 md:pt-36 md:pb-32 lg:grid-cols-2 lg:gap-16">
+      {/* On a laptop the page fits the screen with its footer, even 1366 x 768: no scroll for a form */}
+      <div className="mx-auto grid max-w-6xl gap-12 px-6 pt-28 pb-24 md:pt-36 md:pb-32 lg:grid-cols-2 lg:gap-16 lg:pt-20 lg:pb-8">
         <div className="animate-rise">
           <h1 className="text-2xl leading-[1.2] sm:text-3xl sm:leading-[1.15] md:text-4xl md:leading-[1.1]">
             Mon profil vous intéresse&nbsp;? <br />
@@ -312,7 +313,7 @@ const ContactPage: React.FC = () => {
                 id="message"
                 name="message"
                 required
-                rows={4}
+                rows={3}
                 maxLength={MESSAGE_MAX_LENGTH}
                 placeholder="Votre message"
                 value={values.message}
