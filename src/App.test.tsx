@@ -63,6 +63,24 @@ test("the theme toggle switches to dark and remembers it", async () => {
   ).toBeInTheDocument();
 });
 
+test("the theme toggle gives the browser's bar the color of the theme", async () => {
+  document.documentElement.classList.add("dark");
+  const bar = document.createElement("meta");
+  bar.name = "theme-color";
+  bar.content = "#121212";
+  document.head.append(bar);
+  render(<App />);
+
+  await userEvent.click(
+    screen.getByRole("button", { name: "Passer au thème clair" })
+  );
+
+  expect(document.documentElement).not.toHaveClass("dark");
+  expect(window.localStorage.getItem("theme")).toBe("light");
+  expect(bar.content).toBe("#fafafa");
+  bar.remove();
+});
+
 test("an old #/ link opens its page at the address without the hash", () => {
   visit("#/contact");
   redirectLegacyHashUrl();
