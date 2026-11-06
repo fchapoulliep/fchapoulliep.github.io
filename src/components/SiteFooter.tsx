@@ -10,7 +10,7 @@ import { RESUME_URL } from "../config";
  */
 const SiteFooter: React.FC = () => (
   <footer className="border-t border-border">
-    <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10 sm:flex-row sm:items-center sm:justify-between">
+    <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10 sm:flex-row sm:items-center sm:justify-between lg:py-7">
       <div className="flex items-center gap-4">
         <Logo aria-hidden className="h-10 shrink-0" />
         <div>
@@ -34,7 +34,7 @@ const SiteFooter: React.FC = () => (
       </div>
     </div>
     <div className="border-t border-border">
-      <p className="mx-auto max-w-6xl px-6 py-5 text-xs text-muted-foreground">
+      <p className="mx-auto max-w-6xl px-6 py-5 text-xs text-muted-foreground lg:py-3">
         © {new Date().getFullYear()} Florian Chapoullié-Pino
       </p>
     </div>

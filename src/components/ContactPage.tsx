@@ -259,7 +259,9 @@ const ContactPage: React.FC = () => {
             Envoyez un message ici
           </h2>
 
-          <div className="mt-5 space-y-4">
+          <div className="mt-5 space-y-4 lg:mt-4 lg:space-y-3">
+            {/* Side by side on a laptop: the page then fits a 1280 x 650 window */}
+            <div className="grid gap-4 lg:grid-cols-2">
             <div>
               <label htmlFor="name" className="text-sm font-semibold">
                 Nom
@@ -295,6 +297,7 @@ const ContactPage: React.FC = () => {
                 {...errorProps("email")}
               />
               {fieldError("email")}
+            </div>
             </div>
 
             <div>
