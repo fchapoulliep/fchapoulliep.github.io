@@ -5,7 +5,7 @@
  * the professional ones as a timeline, the personal ones as a showcase.
  */
 
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { ArrowUpRight } from "lucide-react";
 
 import { buttonClasses } from "./ui/button";
@@ -15,7 +15,6 @@ import {
   personalProjects,
   professionalProjects,
 } from "../data/projects";
-import { prefersReducedMotion } from "../lib/motion";
 
 /**
  * A row of technologies, as small pills
@@ -42,72 +41,8 @@ const Technologies: React.FC<{ names: string[]; className?: string }> = ({
  * the role and what the work was. On a phone the period moves above the
  * company, next to the dot, and the timeline keeps a single column.
  */
-/**
- * The ink line of the timeline follows a reading line at 60 % of the window,
- * and the dots it has passed light up. Full and still with less motion.
- */
-const useTimelineProgress = (timeline: React.RefObject<HTMLOListElement>) => {
-  useEffect(() => {
-    const list = timeline.current;
-    if (!list) {
-      return;
-    }
-    let frame = 0;
-    const update = () => {
-      frame = 0;
-      const dots = [...list.querySelectorAll<HTMLElement>("[data-dot]")];
-      if (dots.length < 2) {
-        return;
-      }
-      const box = list.getBoundingClientRect();
-      const centers = dots.map((dot) => {
-        const r = dot.getBoundingClientRect();
-        return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
-      });
-      const first = centers[0];
-      const last = centers[centers.length - 1];
-      const reading = prefersReducedMotion()
-        ? Infinity
-        : window.innerHeight * 0.6;
-      const progress = Math.min(
-        1,
-        Math.max(0, (reading - first.y) / (last.y - first.y))
-      );
-      list.style.setProperty("--line-top", `${first.y - box.top}px`);
-      list.style.setProperty("--line-left", `${Math.round(first.x - box.left)}px`);
-      list.style.setProperty("--line-height", `${last.y - first.y}px`);
-      list.style.setProperty("--progress", String(progress));
-      dots.forEach((dot, i) =>
-        dot.toggleAttribute("data-reached", centers[i].y <= reading)
-      );
-    };
-    const schedule = () => {
-      frame ||= requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener("scroll", schedule, { passive: true });
-    window.addEventListener("resize", schedule);
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", schedule);
-      window.removeEventListener("resize", schedule);
-      list
-        .querySelectorAll("[data-reached]")
-        .forEach((dot) => dot.removeAttribute("data-reached"));
-    };
-  }, [timeline]);
-};
-
-export const ProfessionalProjects: React.FC = () => {
-  const timeline = useRef<HTMLOListElement>(null);
-  useTimelineProgress(timeline);
-  return (
-  <ol ref={timeline} data-list="timeline" className="relative mt-10 md:mt-12">
-    <span
-      aria-hidden
-      data-timeline-ink
-      className="pointer-events-none absolute w-px bg-foreground"
-    />
+export const ProfessionalProjects: React.FC = () => (
+  <ol data-list="timeline" className="mt-10 md:mt-12">
     {professionalProjects.map(
       ({ company, role, period, icon: Icon, logo, highlights, technologies }) => (
         <li
@@ -115,11 +50,16 @@ export const ProfessionalProjects: React.FC = () => {
           data-reveal
           className="group relative grid grid-cols-[2.5rem_minmax(0,1fr)] gap-x-4 pb-10 last:pb-0 md:grid-cols-[9rem_2.5rem_minmax(0,1fr)] md:gap-x-6 md:pb-12"
         >
-          {/* The rule runs from this dot down to the next one, under the dot's center */}
+          {/* The rule runs from this dot down to the next one, under the dot's center.
+              Its ink fills it as it scrolls past (data-segment, index.css): inside the
+              rule, so that it paints over the grey and on the same pixel */}
           <span
             aria-hidden
+            data-segment
             className="absolute top-12 bottom-2 left-5 w-px bg-border group-last:hidden md:left-[11.75rem]"
-          />
+          >
+            <span data-ink />
+          </span>
           <p className="col-start-2 row-start-1 flex h-10 items-center text-sm font-semibold text-muted-foreground md:col-start-1 md:justify-end md:text-right">
             {period}
           </p>
@@ -167,8 +107,7 @@ export const ProfessionalProjects: React.FC = () => {
       )
     )}
   </ol>
-  );
-};
+);
 
 /**
  * The personal projects as a showcase: the featured ones as large cards with

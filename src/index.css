@@ -270,41 +270,108 @@
   translate: 0.25rem 0;
 }
 
-/* The timeline draws itself: an ink line over the grey rule follows the
-   scroll (ProjectSections), and each dot lights up when the line reaches it */
-[data-timeline-ink] {
-  top: var(--line-top, 0);
-  left: var(--line-left, 0);
-  height: var(--line-height, 0);
-  transform: scaleY(var(--progress, 0));
-  transform-origin: top;
+/* The timeline draws itself (charter, motion linked to the scroll). Each
+   segment of the rule fills with ink as it crosses a reading line at 60 % of
+   the window, a drop of light at its tip, and each dot lights up as its centre
+   crosses that line. Scroll-driven animations: the browser ties them to the
+   scroll itself, off the main thread, so they never lag behind a finger or a
+   touchpad. The styles below are the drawn state: without scroll-driven
+   animations (Firefox before 159) or with less motion, the timeline shows
+   drawn in full. */
+[data-segment] {
+  overflow-y: clip;
+  view-timeline: --segment block;
+  view-timeline-inset: 0% 40%;
+}
+[data-ink] {
+  position: absolute;
+  inset: 0;
+  background-color: var(--foreground);
+}
+[data-ink]::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  translate: -50% 50%;
+  background-color: var(--foreground);
+  box-shadow: 0 0 8px 2px var(--drop);
+  opacity: 0;
 }
 [data-dot] {
-  transition:
-    background-color 200ms var(--ease-soft),
-    border-color 200ms var(--ease-soft),
-    color 200ms var(--ease-soft);
+  view-timeline: --dot block;
+  view-timeline-inset: 0% 40%;
 }
-[data-dot][data-reached] {
+/* A dot with an icon turns to ink; a logo keeps its white disc and gets a ring */
+[data-dot]:not(:has(img)) {
   background-color: var(--foreground);
   border-color: var(--foreground);
   color: var(--background);
 }
-/* A logo is not inverted: it waits in grey and comes to its colours when the
-   line reaches it, with a ring in ink around its white disc */
-[data-dot] img {
-  transition:
-    filter 300ms var(--ease-soft),
-    opacity 300ms var(--ease-soft);
-}
-[data-dot]:not([data-reached]) img {
-  filter: grayscale(1);
-  opacity: 0.55;
-}
-[data-dot][data-reached]:has(img) {
-  background-color: white;
+[data-dot]:has(img) {
   outline: 1px solid var(--foreground);
   outline-offset: 3px;
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    [data-ink],
+    [data-ink]::after {
+      animation: ink-draw linear both;
+      animation-timeline: --segment;
+      animation-range: entry-crossing 0% entry-crossing 100%;
+    }
+    [data-ink]::after {
+      animation-name: ink-tip;
+    }
+    [data-dot],
+    [data-dot] img {
+      animation: dot-ink linear both;
+      animation-timeline: --dot;
+      animation-range: entry-crossing 35% entry-crossing 65%;
+    }
+    [data-dot]:has(img) {
+      animation-name: dot-ring;
+    }
+    [data-dot] img {
+      animation-name: logo-colour;
+    }
+  }
+}
+@keyframes ink-draw {
+  from {
+    transform: translateY(-100%);
+  }
+}
+@keyframes ink-tip {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  8%,
+  92% {
+    opacity: 1;
+  }
+}
+@keyframes dot-ink {
+  from {
+    background-color: var(--card);
+    border-color: var(--border-strong);
+    color: var(--foreground);
+  }
+}
+@keyframes dot-ring {
+  from {
+    outline-color: transparent;
+  }
+}
+@keyframes logo-colour {
+  from {
+    filter: grayscale(1);
+    opacity: 0.55;
+  }
 }
 
 /* From the home index to the reports: the page cross-fades, the clicked
