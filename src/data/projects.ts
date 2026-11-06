@@ -133,13 +133,13 @@ export const personalProjects: PersonalProject[] = [
   },
   {
     title: "FAH",
-    description: "Site de mode : la collection 2024, femme, homme et unisexe.",
+    technologies: ["React", "TypeScript", "Ant Design", "React Router"],
     image: fah,
     alt: "Capture du projet FAH",
   },
   {
     title: "CHP Services",
-    description: "Site vitrine d'une entreprise du bâtiment, sur le bassin d'Arcachon.",
+    technologies: ["React", "TypeScript", "Ant Design", "EmailJS"],
     image: chp,
     alt: "Capture du projet CHP Services",
   },
