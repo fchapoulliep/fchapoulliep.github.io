@@ -49,6 +49,29 @@ export const professionalProjects: ProfessionalProject[] = [
     period: "En cours",
     icon: Building2,
     logo: logo("leveria.jpg"),
+    highlights: [
+      {
+        title: "Plateforme des cabinets clients",
+        detail:
+          "Espace privé des cabinets de gestion de patrimoine accompagnés par Leveria : formation en vidéo, bibliothèque de skills IA à télécharger, et communauté avec profils, publications, messagerie et notifications en temps réel.",
+      },
+      {
+        title: "Architecture et déploiement",
+        detail:
+          "Monorepo TypeScript : API Fastify, worker de files de tâches pour les e-mails et les notifications, PostgreSQL, authentification, temps réel par WebSocket, déploiement sous Docker avec Dokploy.",
+      },
+    ],
+    technologies: [
+      "TypeScript",
+      "React",
+      "TanStack",
+      "Fastify",
+      "PostgreSQL",
+      "Redis",
+      "Socket.IO",
+      "Docker",
+      "Dokploy",
+    ],
   },
   {
     company: "Laboratoire L3I, La Rochelle Université",
