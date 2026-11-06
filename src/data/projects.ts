@@ -5,6 +5,8 @@
  * page. The school projects are the experiences (experiences.ts).
  */
 
+import { Building2, FlaskConical, type LucideIcon } from "lucide-react";
+
 import fah from "../images/fah.webp";
 import chp from "../images/chp-services.webp";
 import pokedex3d from "../images/3dpokedex.webp";
@@ -17,6 +19,8 @@ export interface ProfessionalProject {
   company: string;
   role: string;
   period: string;
+  /** Drawn in the dot of the timeline: a company, a laboratory */
+  icon: LucideIcon;
   /** What the work was, as short lines; none when only the role is public */
   highlights?: { title: string; detail: string }[];
   technologies?: string[];
@@ -27,11 +31,13 @@ export const professionalProjects: ProfessionalProject[] = [
     company: "Leveria",
     role: "Alternance, développeur full-stack IA",
     period: "En cours",
+    icon: Building2,
   },
   {
     company: "Laboratoire L3I, La Rochelle Université",
     role: "Stage, recherche en analyse de données et IA",
     period: "Avril à juin 2026",
+    icon: FlaskConical,
     highlights: [
       {
         title: "Projet Habimob",
@@ -54,6 +60,7 @@ export const professionalProjects: ProfessionalProject[] = [
     company: "Savane Vision, Rhinov",
     role: "Stage, développeur front-end",
     period: "Février à juin 2025",
+    icon: Building2,
     highlights: [
       {
         title: "Montée en version du back-office",

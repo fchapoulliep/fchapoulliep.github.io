@@ -1,7 +1,8 @@
 /**
  * ProjectSections.tsx
  * @file ProjectSections.tsx
- * @description The professional and personal projects of the home page.
+ * @description The professional and personal projects of the home page:
+ * the professional ones as a timeline, the personal ones as a showcase.
  */
 
 import React from "react";
@@ -35,35 +36,61 @@ const Technologies: React.FC<{ names: string[]; className?: string }> = ({
 );
 
 /**
- * The professional experiences, most recent first
+ * The professional experiences as a timeline, most recent first: the period
+ * on the left, a dot with an icon on a thin vertical rule, then the company,
+ * the role and what the work was. On a phone the period moves above the
+ * company, next to the dot, and the timeline keeps a single column.
  */
 export const ProfessionalProjects: React.FC = () => (
-  <ol className="mt-10 grid gap-6 md:mt-12">
-    {professionalProjects.map((project) => (
-      <li
-        key={project.company}
-        className="rounded-lg border border-border bg-card p-5 shadow-card md:p-6"
-      >
-        <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-          <h3 className="text-lg md:text-xl">{project.company}</h3>
-          <p className="text-sm text-muted-foreground">{project.period}</p>
-        </div>
-        <p className="mt-1 font-semibold text-muted-foreground">{project.role}</p>
-        {project.highlights && (
-          <ul className="mt-4 grid gap-3 md:grid-cols-2 md:gap-x-8">
-            {project.highlights.map((highlight) => (
-              <li key={highlight.title} className="leading-relaxed">
-                <span className="font-semibold">{highlight.title}</span>
-                <span className="text-muted-foreground"> : {highlight.detail}</span>
-              </li>
-            ))}
-          </ul>
-        )}
-        {project.technologies && (
-          <Technologies names={project.technologies} className="mt-5" />
-        )}
-      </li>
-    ))}
+  <ol className="mt-10 md:mt-12">
+    {professionalProjects.map(
+      ({ company, role, period, icon: Icon, highlights, technologies }) => (
+        <li
+          key={company}
+          className="group relative grid grid-cols-[2.5rem_minmax(0,1fr)] gap-x-4 pb-10 last:pb-0 md:grid-cols-[9rem_2.5rem_minmax(0,1fr)] md:gap-x-6 md:pb-12"
+        >
+          {/* The rule runs from this dot down to the next one, under the dot's center */}
+          <span
+            aria-hidden
+            className="absolute top-12 bottom-2 left-5 w-px bg-border group-last:hidden md:left-[11.75rem]"
+          />
+          <p className="col-start-2 row-start-1 flex h-10 items-center text-sm font-semibold text-muted-foreground md:col-start-1 md:justify-end md:text-right">
+            {period}
+          </p>
+          <span
+            aria-hidden
+            className="col-start-1 row-start-1 grid size-10 place-items-center rounded-full border border-border-strong bg-card text-foreground md:col-start-2"
+          >
+            <Icon strokeWidth={1.75} className="size-4" />
+          </span>
+          <div className="col-start-2 md:col-start-3 md:row-start-1">
+            {/* As high as the dot, so the company sits level with it and the period */}
+            <h3 className="text-lg md:flex md:min-h-10 md:items-center md:text-xl">
+              {company}
+            </h3>
+            <p className="mt-1 font-semibold text-muted-foreground md:mt-0">
+              {role}
+            </p>
+            {highlights && (
+              <ul className="mt-4 grid max-w-prose gap-3 lg:max-w-none lg:grid-cols-2 lg:gap-x-8">
+                {highlights.map((highlight) => (
+                  <li key={highlight.title} className="leading-relaxed">
+                    <span className="font-semibold">{highlight.title}</span>
+                    <span className="text-muted-foreground">
+                      {" "}
+                      : {highlight.detail}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {technologies && (
+              <Technologies names={technologies} className="mt-4" />
+            )}
+          </div>
+        </li>
+      )
+    )}
   </ol>
 );
 

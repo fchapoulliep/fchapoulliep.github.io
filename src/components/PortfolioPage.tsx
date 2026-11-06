@@ -7,7 +7,14 @@
  */
 
 import React, { useEffect, useRef, useState } from "react";
-import { ArrowDown, ChevronDown, FileText } from "lucide-react";
+import {
+  ArrowDown,
+  Briefcase,
+  ChevronDown,
+  FileText,
+  FolderGit2,
+  GraduationCap,
+} from "lucide-react";
 
 import BackgroundLines from "./brand/BackgroundLines";
 import Watermark from "./brand/Watermark";
@@ -123,7 +130,9 @@ const PortfolioPage: React.FC = () => {
         aria-labelledby="pro-title"
         className="mx-auto max-w-6xl scroll-mt-16 px-6 pt-16 md:pt-20"
       >
-        <SectionTitle id="pro-title">Projets professionnels</SectionTitle>
+        <SectionTitle id="pro-title" icon={Briefcase}>
+          Projets professionnels
+        </SectionTitle>
         <ProfessionalProjects />
       </section>
 
@@ -131,7 +140,9 @@ const PortfolioPage: React.FC = () => {
         aria-labelledby="perso-title"
         className="mx-auto max-w-6xl px-6 pt-16 md:pt-20"
       >
-        <SectionTitle id="perso-title">Projets personnels</SectionTitle>
+        <SectionTitle id="perso-title" icon={FolderGit2}>
+          Projets personnels
+        </SectionTitle>
         <PersonalProjects />
       </section>
 
@@ -141,7 +152,9 @@ const PortfolioPage: React.FC = () => {
         className="scroll-mt-16 pt-16 pb-20 md:pt-20 md:pb-24"
       >
         <div className="mx-auto max-w-6xl px-6">
-          <SectionTitle id="experiences-title">Projets scolaires</SectionTitle>
+          <SectionTitle id="experiences-title" icon={GraduationCap}>
+            Projets scolaires
+          </SectionTitle>
           <div className="mt-10 md:mt-12 xl:grid xl:grid-cols-[10rem_minmax(0,1fr)] xl:gap-10">
             <nav
               aria-label="Sommaire des expériences"

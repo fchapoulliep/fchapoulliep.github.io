@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import type { LucideIcon } from "lucide-react";
 import { cn } from "../../lib/cn";
 
 interface SectionTitleProps {
@@ -6,6 +7,8 @@ interface SectionTitleProps {
   id?: string;
   className?: string;
   as?: "h2" | "h3" | "p";
+  /** A Lucide icon set before the words, at the size of the capitals */
+  icon?: LucideIcon;
 }
 
 /**
@@ -16,6 +19,7 @@ const SectionTitle: React.FC<SectionTitleProps> = ({
   id,
   className,
   as: Tag = "h2",
+  icon: Icon,
 }) => (
   <Tag
     id={id}
@@ -25,7 +29,15 @@ const SectionTitle: React.FC<SectionTitleProps> = ({
       className
     )}
   >
-    {children}
+    {Icon ? (
+      // Icon and words stay one item of the flex row, so the rules keep their gap
+      <span className="inline-flex items-center gap-2">
+        <Icon aria-hidden strokeWidth={1.75} className="size-4" />
+        {children}
+      </span>
+    ) : (
+      children
+    )}
   </Tag>
 );
 
