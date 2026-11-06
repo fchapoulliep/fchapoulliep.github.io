@@ -35,4 +35,10 @@ export const PAGES: PageMeta[] = [
     description:
       "Contactez Florian Chapoullié-Pino pour un projet ou une question, par le formulaire de message ou par e-mail.",
   },
+  {
+    path: "retours-experience",
+    title: "Retours d'expérience | Florian Chapoullié-Pino",
+    description:
+      "Les projets scolaires de Florian Chapoullié-Pino, développeur full-stack IA : ce que chacun lui a appris, avec son retour d'expérience complet en PDF.",
+  },
 ];

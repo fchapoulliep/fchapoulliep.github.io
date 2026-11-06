@@ -30,8 +30,65 @@ test("renders the home page with its navigation", () => {
     screen.getByRole("link", { name: "Retour à l'accueil" })
   ).toBeInTheDocument();
   expect(
-    screen.getByRole("heading", { level: 3, name: "Tableau associatif" })
+    screen.getByRole("heading", { level: 3, name: "Leveria" })
   ).toBeInTheDocument();
+});
+
+test("the home page indexes the school projects without telling them", () => {
+  render(<App />);
+
+  const index = screen.getByRole("link", { name: "09 Tableau associatif" });
+  expect(index).toHaveAttribute(
+    "href",
+    `${import.meta.env.BASE_URL}retours-experience#tableau-associatif`
+  );
+  expect(
+    screen.queryByRole("heading", { level: 3, name: "Tableau associatif" })
+  ).not.toBeInTheDocument();
+  expect(
+    screen.getByRole("link", { name: "Tous les retours d'expérience" })
+  ).toHaveAttribute("href", `${import.meta.env.BASE_URL}retours-experience`);
+});
+
+test("an entry of the index opens the reports page at its section", async () => {
+  const scrolled: string[] = [];
+  vi.spyOn(Element.prototype, "scrollIntoView").mockImplementation(
+    function (this: Element) {
+      scrolled.push(this.id);
+    }
+  );
+  render(<App />);
+
+  await userEvent.click(
+    screen.getByRole("link", { name: "07 Symfony" })
+  );
+
+  expect(window.location.pathname).toBe(
+    `${import.meta.env.BASE_URL}retours-experience`
+  );
+  expect(
+    screen.getByRole("heading", { level: 1, name: "Retours d'expérience" })
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole("heading", { level: 3, name: "Symfony" })
+  ).toBeInTheDocument();
+  expect(scrolled).toEqual(["symfony"]);
+  vi.restoreAllMocks();
+});
+
+test("the reports page tells all nine projects, each with its PDF", () => {
+  visit("retours-experience");
+  render(<App />);
+
+  expect(document.title).toBe("Retours d'expérience | Florian Chapoullié-Pino");
+  expect(screen.getAllByRole("article")).toHaveLength(9);
+  expect(
+    screen.getAllByRole("link", { name: "Lire le retour d'expérience" })
+  ).toHaveLength(9);
+  // Reached from the home page only: the navigation bar does not list it
+  expect(
+    screen.queryByRole("link", { name: /Retours d'expérience/ })
+  ).not.toBeInTheDocument();
 });
 
 test("the contact form points out the missing fields and sends nothing", async () => {

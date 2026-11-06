@@ -31,3 +31,4 @@ Object.defineProperty(window, "IntersectionObserver", {
 });
 
 window.scrollTo = vi.fn();
+Element.prototype.scrollIntoView = vi.fn();

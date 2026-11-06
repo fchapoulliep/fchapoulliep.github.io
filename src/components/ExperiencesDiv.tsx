@@ -1,7 +1,7 @@
 /**
  * ExperiencesDiv.tsx
  * @file ExperiencesDiv.tsx
- * @description One experience of the home page: its image, its full text and
+ * @description One experience of the reports page: its image, its full text and
  * the link to its report. From 768 px the image and the text sit side by
  * side, the image alternating between left and right.
  */
@@ -32,7 +32,7 @@ const ExperiencesDiv = forwardRef<HTMLElement, ExperiencesDivProps>(
     const { slug, title, image, imageFit, report, paragraphs } = experience;
     const [revealRef, visible] = useReveal<HTMLDivElement>();
     // On a phone only the first paragraph shows until "Lire la suite": nine full
-    // texts made the home page eleven screens long
+    // texts make the page eleven screens long
     const [expanded, setExpanded] = useState(false);
 
     return (

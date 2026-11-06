@@ -20,6 +20,7 @@ import SiteFooter from "./SiteFooter";
 import PortfolioPage from "./PortfolioPage";
 import DescriptionPage from "./DescriptionPage";
 import ContactPage from "./ContactPage";
+import ExperiencesPage from "./ExperiencesPage";
 import { PAGES } from "../pageMeta";
 
 /**
@@ -64,6 +65,8 @@ const App: React.FC = () => (
           <Route path="/" element={<PortfolioPage />} />
           <Route path="/about" element={<DescriptionPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          {/* Reached from the home page index, not from the navigation bar */}
+          <Route path="/retours-experience" element={<ExperiencesPage />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </main>

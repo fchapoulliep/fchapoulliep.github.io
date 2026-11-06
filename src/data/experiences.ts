@@ -1,6 +1,6 @@
 /**
- * The experiences shown on the home page and listed in the reports menu,
- * in display order
+ * The school projects, in display order: indexed on the home page, told in
+ * full on the experience reports page (/retours-experience)
  */
 import odomo from "../images/odomo.png";
 import biosphere7 from "../images/biosphere7.webp";
@@ -13,7 +13,7 @@ import kifli from "../images/kifli.webp";
 import associativeArray from "../images/associativeArray.png";
 
 export interface Experience {
-  /** Anchor of the experience on the home page */
+  /** Anchor of the experience on the reports page */
   slug: string;
   title: string;
   image: string;

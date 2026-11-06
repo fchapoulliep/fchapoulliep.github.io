@@ -2,13 +2,15 @@
  * PortfolioPage.tsx
  * @file PortfolioPage.tsx
  * @description Home page of the portfolio: the welcome screen, then the
- * professional, personal and school projects; the school ones with a sticky
- * table of contents on large screens.
+ * professional projects as a timeline, the personal ones as a showcase, and
+ * an index of the school ones, whose reports have a page of their own.
  */
 
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
+import { Link } from "react-router-dom";
 import {
   ArrowDown,
+  ArrowRight,
   Briefcase,
   ChevronDown,
   FileText,
@@ -19,7 +21,7 @@ import {
 import BackgroundLines from "./brand/BackgroundLines";
 import Watermark from "./brand/Watermark";
 import SectionTitle from "./brand/SectionTitle";
-import ExperiencesDiv, { experienceNumber } from "./ExperiencesDiv";
+import { experienceNumber } from "./ExperiencesDiv";
 import { PersonalProjects, ProfessionalProjects } from "./ProjectSections";
 import { buttonClasses } from "./ui/button";
 import { experiences } from "../data/experiences";
@@ -31,36 +33,6 @@ import { scrollToElement } from "../services/scrollToTopService";
  * @returns PortfolioPage component
  */
 const PortfolioPage: React.FC = () => {
-  /**
-   * References to each experience, in display order
-   */
-  const experienceRefs = useRef<(HTMLElement | null)[]>([]);
-
-  /**
-   * Experience marked as current in the table of contents
-   */
-  const [currentSlug, setCurrentSlug] = useState(experiences[0].slug);
-
-  useEffect(() => {
-    // The current experience is the one crossing a thin band at mid-height of the window
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setCurrentSlug(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: "-45% 0px -50% 0px" }
-    );
-    experienceRefs.current.forEach((element) => {
-      if (element) {
-        observer.observe(element);
-      }
-    });
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <>
       <section className="relative isolate flex min-h-svh items-center overflow-x-clip">
@@ -149,52 +121,40 @@ const PortfolioPage: React.FC = () => {
       <section
         id="experiences"
         aria-labelledby="experiences-title"
-        className="scroll-mt-16 pt-16 pb-20 md:pt-20 md:pb-24"
+        className="mx-auto max-w-6xl scroll-mt-16 px-6 pt-16 pb-20 md:pt-20 md:pb-24"
       >
-        <div className="mx-auto max-w-6xl px-6">
-          <SectionTitle id="experiences-title" icon={GraduationCap}>
-            Projets scolaires
-          </SectionTitle>
-          <div className="mt-10 md:mt-12 xl:grid xl:grid-cols-[10rem_minmax(0,1fr)] xl:gap-10">
-            <nav
-              aria-label="Sommaire des expériences"
-              className="hidden xl:block"
-            >
-              <ol className="sticky top-24 border-l border-border">
-                {experiences.map(({ slug, title }, index) => (
-                  <li key={slug}>
-                    <button
-                      type="button"
-                      aria-current={currentSlug === slug ? "true" : undefined}
-                      onClick={() =>
-                        scrollToElement(experienceRefs.current[index])
-                      }
-                      className="-ml-px flex w-full items-baseline gap-2.5 border-l-2 border-transparent py-1.5 pl-4 text-left text-sm text-muted-foreground transition-colors duration-150 ease-soft hover:text-foreground aria-[current=true]:border-foreground aria-[current=true]:font-semibold aria-[current=true]:text-foreground"
-                    >
-                      <span className="text-xs tabular-nums">
-                        {experienceNumber(index)}
-                      </span>{" "}
-                      {/* The space keeps "07 Symfony" apart for screen readers; flex hides it */}
-                      {title}
-                    </button>
-                  </li>
-                ))}
-              </ol>
-            </nav>
-            <div className="divide-y divide-border">
-              {experiences.map((experience, index) => (
-                <ExperiencesDiv
-                  key={experience.slug}
-                  experience={experience}
-                  index={index}
-                  ref={(element) => {
-                    experienceRefs.current[index] = element;
-                  }}
+        <SectionTitle id="experiences-title" icon={GraduationCap}>
+          Projets scolaires
+        </SectionTitle>
+        {/* Only an index here: each entry opens the reports page at its section */}
+        <ol className="mt-10 grid rounded-lg border border-border bg-card p-2 shadow-card sm:grid-cols-2 md:mt-12 lg:grid-cols-3">
+          {experiences.map(({ slug, title }, index) => (
+            <li key={slug}>
+              <Link
+                to={`/retours-experience#${slug}`}
+                className="group flex min-h-11 items-center gap-3 rounded-md px-4 py-3 transition-colors duration-150 ease-soft hover:bg-accent"
+              >
+                <span className="text-xs font-semibold text-muted-foreground tabular-nums">
+                  {experienceNumber(index)}
+                </span>{" "}
+                {/* The space keeps "07 Symfony" apart for screen readers; flex hides it */}
+                <span className="font-semibold">{title}</span>
+                <ArrowRight
+                  aria-hidden
+                  strokeWidth={1.75}
+                  className="ml-auto size-4 text-muted-foreground transition-[color,transform] duration-150 ease-soft group-hover:translate-x-0.5 group-hover:text-foreground"
                 />
-              ))}
-            </div>
-          </div>
-        </div>
+              </Link>
+            </li>
+          ))}
+        </ol>
+        <Link
+          to="/retours-experience"
+          className={buttonClasses({ variant: "outline", className: "mt-6" })}
+        >
+          Tous les retours d'expérience
+          <ArrowRight strokeWidth={1.75} />
+        </Link>
       </section>
     </>
   );
