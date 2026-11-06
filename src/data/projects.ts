@@ -5,7 +5,14 @@
  * page. The school projects are the experiences (experiences.ts).
  */
 
-import { Building2, FlaskConical, type LucideIcon } from "lucide-react";
+import {
+  Building2,
+  Clapperboard,
+  FlaskConical,
+  Map as MapIcon,
+  Music,
+  type LucideIcon,
+} from "lucide-react";
 
 import fah from "../images/fah.webp";
 import chp from "../images/chp-services.webp";
@@ -78,14 +85,19 @@ export const professionalProjects: ProfessionalProject[] = [
 ];
 
 /**
- * A personal project. With an image, a card with its screenshot (1200 x 572);
- * without, a smaller card that only names the technologies.
+ * A personal project. A featured one gets a large card with its screenshot
+ * (1200 x 572) and its links; the others a compact row, with a thumbnail and
+ * a short phrase for a site, or an icon and the technologies for a tool.
  */
 export interface PersonalProject {
   title: string;
+  featured?: boolean;
+  /** A few lines on a featured card, one short phrase on a row */
   description?: string;
   image?: string;
   alt?: string;
+  /** Stands for a project without a screenshot on its row */
+  icon?: LucideIcon;
   technologies?: string[];
   /** The live sites, when the project has one to show */
   links?: { label: string; href: string }[];
@@ -94,6 +106,7 @@ export interface PersonalProject {
 export const personalProjects: PersonalProject[] = [
   {
     title: "DragonDex, NarutoDex, MarioDex et BleachDex 3D",
+    featured: true,
     description:
       "Encyclopédies 3D de personnages des univers Dragon Ball, Naruto, Super Mario et Bleach, sur la même base React et Three.js, avec des modèles posés et animés dans Blender.",
     image: dex3dMosaic,
@@ -107,6 +120,7 @@ export const personalProjects: PersonalProject[] = [
   },
   {
     title: "3D Pokédex",
+    featured: true,
     description:
       "Pokédex 3D des 151 Pokémon originaux, réalisé avec React et Three.js, avec des modèles interactifs rendus avec Blender.",
     image: pokedex3d,
@@ -120,20 +134,19 @@ export const personalProjects: PersonalProject[] = [
   },
   {
     title: "FAH",
-    description:
-      "Site de mode présentant la collection 2024 : femme, homme et unisexe.",
+    description: "Site de mode : la collection 2024, femme, homme et unisexe.",
     image: fah,
     alt: "Capture du projet FAH",
   },
   {
     title: "CHP Services",
-    description:
-      "Site vitrine d'une entreprise de chauffage, climatisation, plomberie et couverture sur le bassin d'Arcachon.",
+    description: "Site vitrine d'une entreprise du bâtiment, sur le bassin d'Arcachon.",
     image: chp,
     alt: "Capture du projet CHP Services",
   },
   {
     title: "Montage vidéo automatisé",
+    icon: Clapperboard,
     technologies: [
       "TypeScript",
       "Remotion",
@@ -147,10 +160,12 @@ export const personalProjects: PersonalProject[] = [
   },
   {
     title: "FestivApp",
+    icon: MapIcon,
     technologies: ["TypeScript", "React", "Leaflet", "Open data"],
   },
   {
     title: "Générateur de musique",
+    icon: Music,
     technologies: ["Python", "Flask", "Docker", "MusicGen"],
   },
 ];

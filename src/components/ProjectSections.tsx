@@ -95,16 +95,18 @@ export const ProfessionalProjects: React.FC = () => (
 );
 
 /**
- * The personal projects: those with a screenshot as large cards, then the
- * others as small cards that only name their technologies
+ * The personal projects as a showcase: the featured ones as large cards with
+ * their screenshot and links, then the others as compact rows. A row starts
+ * with a thumbnail (a site) or an icon (a tool) in a frame of the same size,
+ * so that titles and details line up from one row to the next.
  */
 export const PersonalProjects: React.FC = () => {
-  const shown = personalProjects.filter((project) => project.image);
-  const listed = personalProjects.filter((project) => !project.image);
+  const featured = personalProjects.filter((project) => project.featured);
+  const listed = personalProjects.filter((project) => !project.featured);
   return (
     <>
       <ul className="mt-10 grid gap-6 sm:grid-cols-2 md:mt-12">
-        {shown.map((project) => (
+        {featured.map((project) => (
           <li
             key={project.title}
             className="flex flex-col overflow-hidden rounded-lg border border-border bg-card shadow-card transition-[border-color,transform] duration-200 ease-soft hover:-translate-y-0.5 hover:border-border-strong"
@@ -147,15 +149,39 @@ export const PersonalProjects: React.FC = () => {
           </li>
         ))}
       </ul>
-      <ul className="mt-6 grid gap-6 md:grid-cols-3">
-        {listed.map((project) => (
+      <ul className="mt-6 divide-y divide-border rounded-lg border border-border bg-card shadow-card">
+        {listed.map(({ title, description, image, alt, icon: Icon, technologies }) => (
           <li
-            key={project.title}
-            className="rounded-lg border border-border bg-card p-5 shadow-card md:p-6"
+            key={title}
+            className="grid grid-cols-[5rem_minmax(0,1fr)] items-center gap-x-4 gap-y-1 px-4 py-4 md:px-6 lg:grid-cols-[6rem_14rem_minmax(0,1fr)] lg:gap-x-6"
           >
-            <h3 className="text-lg">{project.title}</h3>
-            {project.technologies && (
-              <Technologies names={project.technologies} className="mt-4" />
+            {/* On a phone the frame spans the title and its detail, level with the title */}
+            <div className="row-span-2 self-start pt-1 lg:row-span-1 lg:self-center lg:pt-0">
+              {image ? (
+                <ZoomableImage
+                  src={image}
+                  alt={alt ?? title}
+                  hint={false}
+                  className="aspect-[1200/572] rounded-md border border-border"
+                />
+              ) : (
+                Icon && (
+                  <span
+                    aria-hidden
+                    className="grid aspect-[1200/572] place-items-center rounded-md border border-border bg-muted text-muted-foreground"
+                  >
+                    <Icon strokeWidth={1.75} className="size-5" />
+                  </span>
+                )
+              )}
+            </div>
+            <h3 className="text-base">{title}</h3>
+            {description ? (
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                {description}
+              </p>
+            ) : (
+              technologies && <Technologies names={technologies} />
             )}
           </li>
         ))}

@@ -10,6 +10,8 @@ interface ZoomableImageProps {
   fit?: "cover" | "contain";
   /** Size and shape of the frame, usually an aspect ratio and a radius */
   className?: string;
+  /** The "Agrandir" label on hover, left out on a thumbnail too small for it */
+  hint?: boolean;
 }
 
 /**
@@ -21,6 +23,7 @@ const ZoomableImage: React.FC<ZoomableImageProps> = ({
   alt,
   fit = "cover",
   className,
+  hint = true,
 }) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const close = () => dialogRef.current?.close();
@@ -48,13 +51,15 @@ const ZoomableImage: React.FC<ZoomableImageProps> = ({
             fit === "contain" ? "object-contain p-2" : "object-cover"
           )}
         />
-        <span
-          aria-hidden
-          className="absolute right-3 bottom-3 inline-flex items-center gap-1.5 rounded-full border border-border bg-background/90 px-3 py-1.5 text-xs font-semibold text-foreground opacity-0 transition-opacity duration-200 ease-soft group-hover:opacity-100 group-focus-visible:opacity-100"
-        >
-          <Maximize2 strokeWidth={1.75} className="size-3.5" />
-          Agrandir
-        </span>
+        {hint && (
+          <span
+            aria-hidden
+            className="absolute right-3 bottom-3 inline-flex items-center gap-1.5 rounded-full border border-border bg-background/90 px-3 py-1.5 text-xs font-semibold text-foreground opacity-0 transition-opacity duration-200 ease-soft group-hover:opacity-100 group-focus-visible:opacity-100"
+          >
+            <Maximize2 strokeWidth={1.75} className="size-3.5" />
+            Agrandir
+          </span>
+        )}
       </button>
       <dialog
         ref={dialogRef}
