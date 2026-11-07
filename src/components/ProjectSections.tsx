@@ -118,6 +118,8 @@ export const ProfessionalProjects: React.FC = () => (
 export const PersonalProjects: React.FC = () => {
   const featured = personalProjects.filter((project) => project.featured);
   const listed = personalProjects.filter((project) => !project.featured);
+  // a lone featured card takes both columns, its screenshot beside its text
+  const lone = featured.length === 1;
   return (
     <>
       <ul className="mt-10 grid gap-6 sm:grid-cols-2 md:mt-12">
@@ -125,12 +127,18 @@ export const PersonalProjects: React.FC = () => {
           <li
             key={project.title}
             data-reveal
-            className="flex flex-col overflow-hidden rounded-lg border border-border bg-card shadow-card transition-[border-color,transform] duration-200 ease-soft hover:-translate-y-0.5 hover:border-border-strong"
+            className={`flex flex-col overflow-hidden rounded-lg border border-border bg-card shadow-card transition-[border-color,transform] duration-200 ease-soft hover:-translate-y-0.5 hover:border-border-strong${
+              lone ? " sm:col-span-2 md:flex-row" : ""
+            }`}
           >
             <ZoomableImage
               src={project.image as string}
               alt={project.alt ?? project.title}
-              className="aspect-[1200/572] border-b border-border"
+              className={
+                lone
+                  ? "aspect-[1200/572] border-b border-border md:w-1/2 md:shrink-0 md:self-center md:border-r md:border-b-0"
+                  : "aspect-[1200/572] border-b border-border"
+              }
             />
             <div className="flex flex-1 flex-col p-5 md:p-6">
               <h3 className="text-lg md:text-xl">{project.title}</h3>
@@ -138,12 +146,16 @@ export const PersonalProjects: React.FC = () => {
                 {project.description}
               </p>
               {/* At the bottom of the card, so that buttons line up from one card to the next;
-                  several sites share a two-column grid, which never leaves one button alone on a row */}
+                  several sites share a grid that never leaves one button alone on a row:
+                  two columns, three for an odd count (five dex: three, then two), stacked
+                  on a phone where three columns overlapped */}
               {project.links && (
                 <div
                   className={
                     project.links.length > 1
-                      ? "mt-auto grid grid-cols-2 gap-2 pt-6"
+                      ? project.links.length % 2 === 1
+                        ? "mt-auto grid grid-cols-1 gap-2 pt-6 md:grid-cols-3"
+                        : "mt-auto grid grid-cols-2 gap-2 pt-6"
                       : "mt-auto flex pt-6"
                   }
                 >

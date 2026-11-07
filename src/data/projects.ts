@@ -16,7 +16,6 @@ import {
 
 import fah from "../images/fah.webp";
 import chp from "../images/chp-services.webp";
-import pokedex3d from "../images/3dpokedex.webp";
 import dex3dMosaic from "../images/dex3d-mosaic.webp";
 import WaveformArt from "../components/brand/WaveformArt";
 
@@ -146,31 +145,18 @@ export interface PersonalProject {
 
 export const personalProjects: PersonalProject[] = [
   {
-    title: "DragonDex, NarutoDex, MarioDex et BleachDex 3D",
+    title: "3D Pokédex, DragonDex, NarutoDex, MarioDex et BleachDex",
     featured: true,
     description:
-      "Encyclopédies 3D de personnages des univers Dragon Ball, Naruto, Super Mario et Bleach, sur la même base React et Three.js, avec des modèles posés et animés dans Blender.",
+      "Encyclopédies 3D de personnages des univers Pokémon, Dragon Ball, Naruto, Super Mario et Bleach, dont les 151 Pokémon originaux, sur la même base React et Three.js, avec des modèles posés et animés dans Blender.",
     image: dex3dMosaic,
-    alt: "Captures des encyclopédies 3D Dragon Ball, Naruto, Super Mario et Bleach",
+    alt: "Captures des encyclopédies 3D Dragon Ball, Naruto, Bleach, Pokémon et Super Mario",
     links: [
+      { label: "3D Pokédex", href: "https://fchapoulliep.github.io/3dpokedex/" },
       { label: "DragonDex", href: "https://fchapoulliep.github.io/dragondex3d/" },
       { label: "NarutoDex", href: "https://fchapoulliep.github.io/narutodex3d/" },
       { label: "MarioDex", href: "https://fchapoulliep.github.io/mariodex3d/" },
       { label: "BleachDex", href: "https://fchapoulliep.github.io/bleachdex3d/" },
-    ],
-  },
-  {
-    title: "3D Pokédex",
-    featured: true,
-    description:
-      "Pokédex 3D des 151 Pokémon originaux, réalisé avec React et Three.js, avec des modèles interactifs rendus avec Blender.",
-    image: pokedex3d,
-    alt: "Capture du 3D Pokédex : modèle 3D de Venusaur dans une forêt",
-    links: [
-      {
-        label: "Ouvrir le 3D Pokédex",
-        href: "https://fchapoulliep.github.io/3dpokedex/",
-      },
     ],
   },
   {
