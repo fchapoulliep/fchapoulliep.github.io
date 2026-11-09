@@ -6,8 +6,8 @@
  * @module pageMeta
  */
 
-/** The address of the site on GitHub Pages, with its trailing slash. */
-export const SITE_URL = "https://fchapoulliep.github.io/portfolio/";
+/** The address of the site, the root of the GitHub Pages domain, with its trailing slash. */
+export const SITE_URL = "https://fchapoulliep.github.io/";
 
 export interface PageMeta {
   /** The route, without slashes: "" for the home page. */

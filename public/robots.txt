@@ -1,3 +1,10 @@
 User-agent: *
 Allow: /
-Sitemap: https://fchapoulliep.github.io/portfolio/sitemap.xml
+
+# Crawlers only read robots.txt at the domain root, which is this site: it lists the sitemaps of every site of the domain.
+Sitemap: https://fchapoulliep.github.io/sitemap.xml
+Sitemap: https://fchapoulliep.github.io/3dpokedex/sitemap.xml
+Sitemap: https://fchapoulliep.github.io/bleachdex3d/sitemap.xml
+Sitemap: https://fchapoulliep.github.io/dragondex3d/sitemap.xml
+Sitemap: https://fchapoulliep.github.io/mariodex3d/sitemap.xml
+Sitemap: https://fchapoulliep.github.io/narutodex3d/sitemap.xml

@@ -3,7 +3,10 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import emailjs from "@emailjs/browser";
 import App from "./components/App";
-import { redirectLegacyHashUrl } from "./services/hashRedirectService";
+import {
+  legacyBasePathTarget,
+  redirectLegacyHashUrl,
+} from "./services/legacyUrlService";
 
 vi.mock("@emailjs/browser", () => ({ default: { send: vi.fn() } }));
 
@@ -146,4 +149,17 @@ test("an old #/ link opens its page at the address without the hash", () => {
   expect(window.location.pathname).toBe(`${import.meta.env.BASE_URL}contact`);
   expect(window.location.hash).toBe("");
   expect(screen.getByRole("button", { name: "Envoyer" })).toBeInTheDocument();
+});
+
+test("an old /portfolio/ address leads to the same path at the root", () => {
+  expect(
+    legacyBasePathTarget("/portfolio/experiences/retourSQL.pdf", "", "")
+  ).toBe("/experiences/retourSQL.pdf");
+  expect(
+    legacyBasePathTarget("/portfolio/retours-experience", "?a=1", "#sql")
+  ).toBe("/retours-experience?a=1#sql");
+  expect(legacyBasePathTarget("/portfolio", "", "")).toBe("/");
+  expect(legacyBasePathTarget("/portfolio/", "", "#/contact")).toBe("/#/contact");
+  expect(legacyBasePathTarget("/contact", "", "")).toBeNull();
+  expect(legacyBasePathTarget("/portfolios", "", "")).toBeNull();
 });

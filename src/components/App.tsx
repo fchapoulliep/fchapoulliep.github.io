@@ -67,7 +67,7 @@ const Layout: React.FC = () => (
 );
 
 /**
- * The pages live under the base path of the site (/portfolio/ on GitHub
+ * The pages live under the base path of the site (the domain root on GitHub
  * Pages). A data router, not BrowserRouter: only RouterProvider runs the view
  * transitions that <Link viewTransition> asks for.
  */

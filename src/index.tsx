@@ -1,16 +1,22 @@
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './components/App';
-import { redirectLegacyHashUrl } from './services/hashRedirectService';
+import {
+  redirectLegacyBasePath,
+  redirectLegacyHashUrl,
+} from './services/legacyUrlService';
 
-redirectLegacyHashUrl();
+if (!redirectLegacyBasePath()) {
+  redirectLegacyHashUrl();
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+  const root = ReactDOM.createRoot(
+    document.getElementById('root') as HTMLElement
+  );
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  );
+}
