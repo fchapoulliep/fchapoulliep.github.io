@@ -8,7 +8,7 @@
 // Le rapport renvoyé donne, par retex : nombre de pages, densité retenue (normal ou compact), remplissage de
 // chaque page en %, images chargées, polices chargées, et la dernière ligne de texte de chaque page du PDF.
 async (page) => {
-  const ROOT = '/home/florian_pino/perso/portfolio/retex/';
+  const ROOT = '/home/florian_pino/perso/fchapoulliep.github.io/retex/';
   const BASE = 'http://127.0.0.1:8765/';
   const SLUGS = ['retourOdomo', 'retourBiosphere', 'retourMachine', 'retourSQL', 'retourWeb', 'retourSWOT', 'retourSymfony', 'retourKifli', 'retourTableauAssociatif'];
   // Deux variantes : neutre (fond blanc) et teinte (fond doux propre à chaque retex, champ "teinte" du fichier de données).
